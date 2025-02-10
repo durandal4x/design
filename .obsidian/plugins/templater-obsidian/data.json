@@ -1,0 +1,103 @@
+{
+  "command_timeout": 5,
+  "templates_folder": "templates",
+  "templates_pairs": [
+    [
+      "",
+      ""
+    ]
+  ],
+  "trigger_on_file_creation": true,
+  "auto_jump_to_cursor": true,
+  "enable_system_commands": false,
+  "shell_path": "",
+  "user_scripts_folder": "",
+  "enable_folder_templates": true,
+  "folder_templates": [
+    {
+      "folder": "concepts",
+      "template": "templates/template concept.md"
+    },
+    {
+      "folder": "examples/games",
+      "template": "templates/example - game.md"
+    },
+    {
+      "folder": "implementation/properties",
+      "template": "templates/implementation - property.md"
+    },
+    {
+      "folder": "tag lists",
+      "template": "templates/taglist.md"
+    },
+    {
+      "folder": "implementation/systems",
+      "template": "templates/implementation - system.md"
+    },
+    {
+      "folder": "examples/stories",
+      "template": "templates/example - story.md"
+    },
+    {
+      "folder": "implementation/mechanics",
+      "template": "templates/implementation - mechanics.md"
+    },
+    {
+      "folder": "implementation/interface",
+      "template": "templates/implementation - interface.md"
+    },
+    {
+      "folder": "examples/abilities",
+      "template": "templates/example - ability.md"
+    },
+    {
+      "folder": "examples/units",
+      "template": "templates/example - unit.md"
+    },
+    {
+      "folder": "examples/missions",
+      "template": "templates/example - mission.md"
+    },
+    {
+      "folder": "design/game-modes",
+      "template": "templates/game-mode.md"
+    },
+    {
+      "folder": "examples/factions",
+      "template": "templates/example - faction.md"
+    },
+    {
+      "folder": "design/spectra",
+      "template": "templates/design - spectrum.md"
+    },
+    {
+      "folder": "questions",
+      "template": "templates/template question.md"
+    },
+    {
+      "folder": "snippets",
+      "template": "templates/snippet.md"
+    },
+    {
+      "folder": "design/genres",
+      "template": "templates/design - genre.md"
+    },
+    {
+      "folder": "design/adjectives",
+      "template": "templates/design - adjective.md"
+    },
+    {
+      "folder": "examples/characters",
+      "template": "templates/example - character.md"
+    }
+  ],
+  "syntax_highlighting": true,
+  "syntax_highlighting_mobile": false,
+  "enabled_templates_hotkeys": [
+    ""
+  ],
+  "startup_templates": [
+    ""
+  ],
+  "enable_ribbon_icon": true
+}

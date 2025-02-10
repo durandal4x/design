@@ -1,0 +1,6 @@
+---
+type: example
+tags: 
+aliases:
+---
+

@@ -1,0 +1,28 @@
+{
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "games": "multitext",
+    "related": "multitext",
+    "synonyms": "multitext",
+    "other links": "multitext",
+    "links": "multitext",
+    "wikipedia": "multitext",
+    "scale-spectrum": "number",
+    "hardcore": "number",
+    "combat prominence": "number",
+    "sandbox": "number",
+    "ability_complexity": "number",
+    "systems": "multitext",
+    "turn_speed": "number",
+    "randomness": "number",
+    "websites": "multitext",
+    "genres": "multitext",
+    "unit-roles": "multitext",
+    "uniqueness_of_abilities": "number",
+    "construction_prominence": "number",
+    "members": "multitext",
+    "attendees": "multitext"
+  }
+}

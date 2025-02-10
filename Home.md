@@ -1,0 +1,5 @@
+---
+type: home
+---
+[[Design board]]
+

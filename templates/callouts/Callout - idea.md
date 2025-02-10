@@ -1,0 +1,2 @@
+> [!idea]
+> <% tp.file.cursor() %>

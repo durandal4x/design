@@ -1,0 +1,76 @@
+{
+  "targetAttributes": [
+    "type"
+  ],
+  "targetTags": true,
+  "getFromInlineField": true,
+  "enableTabHeader": true,
+  "activateSnippet": true,
+  "enableEditor": true,
+  "enableFileList": true,
+  "enableBacklinks": true,
+  "enableQuickSwitcher": true,
+  "enableSuggestor": true,
+  "selectors": [
+    {
+      "type": "attribute",
+      "name": "type",
+      "value": "design-doc",
+      "matchCaseSensitive": false,
+      "match": "exact",
+      "uid": "8859-6705",
+      "selectText": true,
+      "selectAppend": true,
+      "selectPrepend": true,
+      "selectBackground": true
+    },
+    {
+      "type": "attribute",
+      "name": "type",
+      "value": "meeting",
+      "matchCaseSensitive": false,
+      "match": "exact",
+      "uid": "7cba-d775",
+      "selectText": true,
+      "selectAppend": true,
+      "selectPrepend": true,
+      "selectBackground": true
+    },
+    {
+      "type": "attribute",
+      "name": "type",
+      "value": "person",
+      "matchCaseSensitive": false,
+      "match": "exact",
+      "uid": "f133-7b99",
+      "selectText": true,
+      "selectAppend": true,
+      "selectPrepend": true,
+      "selectBackground": true
+    },
+    {
+      "type": "attribute",
+      "name": "type",
+      "value": "concept",
+      "matchCaseSensitive": false,
+      "match": "exact",
+      "uid": "04db-0ff0",
+      "selectText": true,
+      "selectAppend": true,
+      "selectPrepend": true,
+      "selectBackground": true
+    },
+    {
+      "type": "attribute",
+      "name": "type",
+      "value": "example",
+      "matchCaseSensitive": false,
+      "match": "exact",
+      "uid": "83b6-8311",
+      "selectText": true,
+      "selectAppend": true,
+      "selectPrepend": true,
+      "selectBackground": true
+    }
+  ]
+}

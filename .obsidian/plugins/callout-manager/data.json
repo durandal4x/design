@@ -1,0 +1,49 @@
+{
+  "callouts": {
+    "custom": [
+      "calculation",
+      "feedback",
+      "review",
+      "spectrum"
+    ],
+    "settings": {
+      "calculation": [
+        {
+          "changes": {
+            "icon": "lucide-calculator",
+            "color": "158, 158, 158"
+          }
+        }
+      ],
+      "feedback": [
+        {
+          "changes": {
+            "icon": "lucide-message-circle",
+            "color": "83, 223, 221"
+          }
+        }
+      ],
+      "review": [
+        {
+          "changes": {
+            "icon": "lucide-file-text",
+            "color": "82, 139, 212"
+          }
+        }
+      ],
+      "spectrum": [
+        {
+          "changes": {
+            "icon": "lucide-list-ordered",
+            "color": "168, 130, 255"
+          }
+        }
+      ]
+    }
+  },
+  "calloutDetection": {
+    "obsidian": true,
+    "theme": true,
+    "snippet": true
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "show-checkboxes": false,
+  "hide-card-count": true,
+  "new-note-template": "templates/kanban-ticket.md",
+  "new-note-folder": "kanban-tickets"
+}
