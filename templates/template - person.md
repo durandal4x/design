@@ -5,7 +5,8 @@ discord_name:
 tags: 
 type: person
 pronouns: 
-aliases:
+aliases: 
+gh_name:
 ---
 # <% tp.file.title %>
 <% await tp.file.move("people/" + tp.file.title) %>

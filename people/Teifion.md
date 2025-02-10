@@ -5,7 +5,8 @@ discord_name: Teifion
 tags: 
 type: person
 pronouns: 
-aliases:
+aliases: 
+gh_name: Teifion
 ---
 # Teifion
 

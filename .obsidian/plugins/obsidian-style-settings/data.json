@@ -1,7 +1,18 @@
 {
-  "supercharged-links@@8859-6705-before": "\"\"",
   "supercharged-links@@8859-6705-color": "#5A9FE1",
   "supercharged-links@@7cba-d775-color": "#FF48AA",
   "supercharged-links@@83b6-8311-color": "#CB4B41",
-  "supercharged-links@@04db-0ff0-color": "#FFC75F"
+  "supercharged-links@@04db-0ff0-color": "#FFC75F",
+  "ITS@@accent-color": false,
+  "ITS@@slrvb-g": false,
+  "ITS@@slrvb-b": false,
+  "ITS@@t-d": false,
+  "ITS@@drwn": false,
+  "ITS@@nord": false,
+  "ITS@@mini": false,
+  "ITS@@notion": false,
+  "ITS@@its-d": false,
+  "ITS@@select": "pathfinder-remaster",
+  "supercharged-links@@0365-381e-color": "#666597",
+  "supercharged-links@@f133-7b99-color": "#2FAB63"
 }

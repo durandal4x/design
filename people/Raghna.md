@@ -5,7 +5,8 @@ discord_name: Raghna
 tags: 
 type: person
 pronouns: 
-aliases:
+aliases: 
+gh_name: Avaristimo
 ---
 # Raghna
 

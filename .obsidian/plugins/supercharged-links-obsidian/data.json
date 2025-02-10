@@ -71,6 +71,18 @@
       "selectAppend": true,
       "selectPrepend": true,
       "selectBackground": true
+    },
+    {
+      "type": "attribute",
+      "name": "type",
+      "value": "design-comments",
+      "matchCaseSensitive": false,
+      "match": "exact",
+      "uid": "0365-381e",
+      "selectText": true,
+      "selectAppend": true,
+      "selectPrepend": true,
+      "selectBackground": true
     }
   ]
 }
