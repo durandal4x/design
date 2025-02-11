@@ -24,6 +24,7 @@
     "construction_prominence": "number",
     "members": "multitext",
     "attendees": "multitext",
-    "role": "text"
+    "role": "text",
+    "participants": "multitext"
   }
 }
