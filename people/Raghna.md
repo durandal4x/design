@@ -1,6 +1,5 @@
 ---
-title: 
-email: 
+role: Designer
 discord_name: Raghna
 tags: 
 type: person

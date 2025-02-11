@@ -23,6 +23,7 @@
     "uniqueness_of_abilities": "number",
     "construction_prominence": "number",
     "members": "multitext",
-    "attendees": "multitext"
+    "attendees": "multitext",
+    "role": "text"
   }
 }
