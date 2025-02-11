@@ -1,6 +1,5 @@
 ---
-title: 
-email: 
+role: Developer
 discord_name: Teifion
 tags: 
 type: person

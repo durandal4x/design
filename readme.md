@@ -26,7 +26,7 @@ Design discussions and decisions should be performed using the [github project](
 - Wait for the discussion to conclude
 
 **2 - Update your local copy and create a branch**
-```
+```sh
 git switch main
 git pull durandal main
 git switch -c {{branch name}}
@@ -43,7 +43,7 @@ git switch -c {{branch name}}
 	- e.g. `python3 scripts/get_comments.py 123`
 
 **5 - Create the Pull request**
-```
+```sh
 git add .
 git commit -m "First draft of design doc"
 git push origin {{branch name}}

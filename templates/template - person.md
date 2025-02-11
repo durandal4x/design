@@ -1,6 +1,5 @@
 ---
-title: 
-email: 
+role: 
 discord_name: 
 tags: 
 type: person
