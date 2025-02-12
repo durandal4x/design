@@ -1,6 +1,8 @@
 ---
 tags: 
 type: design-doc
-github-issue:
+issue_number: 
+github_issue: 
+comments: 
 ---
 <% await tp.file.move("/design docs/" + tp.file.title) %>

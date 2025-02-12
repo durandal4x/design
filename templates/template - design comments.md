@@ -2,6 +2,7 @@
 tags: 
 type: design-comments
 github-issue: 
-design-doc:
+document: 
+participants:
 ---
 <% await tp.file.move("/discussions/" + tp.file.title) %>
