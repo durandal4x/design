@@ -1,6 +1,6 @@
 ---
 name: Design discussion
-about: Discussions about ideas and concepts
+about: Discussions about ideas and concepts, no end goal required
 title: "[DISCUSS] "
 labels: Discussion
 assignees: ''
