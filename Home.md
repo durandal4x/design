@@ -1,5 +1,5 @@
 ---
 type: home
 ---
-[[Design board]]
+
 

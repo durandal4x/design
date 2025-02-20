@@ -1683,7 +1683,7 @@ __export(main_exports, {
   default: () => AdvancedCanvasPlugin
 });
 module.exports = __toCommonJS(main_exports);
-var import_obsidian13 = require("obsidian");
+var import_obsidian14 = require("obsidian");
 
 // src/quicksettings.ts
 var import_obsidian2 = require("obsidian");
@@ -1691,10 +1691,51 @@ var import_obsidian2 = require("obsidian");
 // src/settings.ts
 var import_obsidian = require("obsidian");
 
+// src/utils/text-helper.ts
+var TextHelper = class {
+  static toCamelCase(str) {
+    return str.replace(/-./g, (x) => x[1].toUpperCase());
+  }
+};
+
 // src/canvas-extensions/advanced-styles/style-config.ts
+function styleAttributeValidator(json) {
+  var _a;
+  const hasKey = json.key !== void 0;
+  const hasLabel = json.label !== void 0;
+  const hasOptions = Array.isArray(json.options);
+  if (!hasKey)
+    console.error('Style attribute is missing the "key" property');
+  if (!hasLabel)
+    console.error('Style attribute is missing the "label" property');
+  if (!hasOptions)
+    console.error('Style attribute is missing the "options" property or it is not an array');
+  json.key = TextHelper.toCamelCase(json.key);
+  let optionsValid = true;
+  let hasDefault = false;
+  for (const option of json.options) {
+    const hasIcon = option.icon !== void 0;
+    const hasLabel2 = option.label !== void 0;
+    const hasValue = option.value !== void 0;
+    if (!hasIcon)
+      console.error(`Style attribute option (${(_a = option.value) != null ? _a : option.label}) is missing the "icon" property`);
+    if (!hasLabel2)
+      console.error(`Style attribute option (${option.value}) is missing the "label" property`);
+    if (!hasValue)
+      console.error(`Style attribute option (${option.label}) is missing the "value" property`);
+    if (!hasIcon || !hasLabel2 || !hasValue)
+      optionsValid = false;
+    if (option.value === null)
+      hasDefault = true;
+  }
+  if (!hasDefault)
+    console.error('Style attribute is missing a default option (option with a "value" of null)');
+  const isValid = hasKey && hasLabel && hasOptions && optionsValid && hasDefault;
+  return isValid ? json : null;
+}
 var BUILTIN_NODE_STYLE_ATTRIBUTES = [
   {
-    datasetKey: "textAlign",
+    key: "textAlign",
     label: "Text Alignment",
     nodeTypes: ["text"],
     options: [
@@ -1716,7 +1757,7 @@ var BUILTIN_NODE_STYLE_ATTRIBUTES = [
     ]
   },
   {
-    datasetKey: "shape",
+    key: "shape",
     label: "Shape",
     nodeTypes: ["text"],
     options: [
@@ -1763,7 +1804,7 @@ var BUILTIN_NODE_STYLE_ATTRIBUTES = [
     ]
   },
   {
-    datasetKey: "border",
+    key: "border",
     label: "Border",
     options: [
       {
@@ -1791,7 +1832,7 @@ var BUILTIN_NODE_STYLE_ATTRIBUTES = [
 ];
 var BUILTIN_EDGE_STYLE_ATTRIBUTES = [
   {
-    datasetKey: "path",
+    key: "path",
     label: "Path Style",
     options: [
       {
@@ -1817,7 +1858,7 @@ var BUILTIN_EDGE_STYLE_ATTRIBUTES = [
     ]
   },
   {
-    datasetKey: "arrow",
+    key: "arrow",
     label: "Arrow Style",
     options: [
       {
@@ -1863,7 +1904,7 @@ var BUILTIN_EDGE_STYLE_ATTRIBUTES = [
     ]
   },
   {
-    datasetKey: "pathfindingMethod",
+    key: "pathfindingMethod",
     label: "Pathfinding Method",
     options: [
       {
@@ -2531,12 +2572,12 @@ var AdvancedCanvasPluginSettingTab = class extends import_obsidian.PluginSetting
       new import_obsidian.Setting(nestedContainerEl).setName(styleAttribute.label).addDropdown(
         (dropdown) => {
           var _a;
-          return dropdown.addOptions(Object.fromEntries(styleAttribute.options.map((option) => [option.value, option.value === null ? `${option.label} (default)` : option.label]))).setValue((_a = this.settingsManager.getSetting(settingId)[styleAttribute.datasetKey]) != null ? _a : "null").onChange(async (value) => {
+          return dropdown.addOptions(Object.fromEntries(styleAttribute.options.map((option) => [option.value, option.value === null ? `${option.label} (default)` : option.label]))).setValue((_a = this.settingsManager.getSetting(settingId)[styleAttribute.key]) != null ? _a : "null").onChange(async (value) => {
             const newValue = this.settingsManager.getSetting(settingId);
             if (value === "null")
-              delete newValue[styleAttribute.datasetKey];
+              delete newValue[styleAttribute.key];
             else
-              newValue[styleAttribute.datasetKey] = value;
+              newValue[styleAttribute.key] = value;
             await this.settingsManager.setSetting({
               [settingId]: newValue
             });
@@ -2694,7 +2735,7 @@ var SearchStyleAttributeModal = class extends SearchKeyValueSettingModal {
     return "Type to search style attributes...";
   }
   getAllSuggestions() {
-    return this.setting.getParameters(this.settingsManager).map((styleAttribute) => [styleAttribute.datasetKey, styleAttribute]);
+    return this.setting.getParameters(this.settingsManager).map((styleAttribute) => [styleAttribute.key, styleAttribute]);
   }
   doesSuggestionMatchQuery(key, value, query) {
     return key.toLowerCase().includes(query.toLowerCase()) || value.label.toLowerCase().includes(query.toLowerCase());
@@ -2737,9 +2778,9 @@ var SetStyleAttributeModal = class extends SearchKeyValueSettingModal {
   onSelectedSuggestion(key, _value) {
     const newValue = this.settingsManager.getSetting(this.settingsKey);
     if (key === null)
-      delete newValue[this.styleAttribute.datasetKey];
+      delete newValue[this.styleAttribute.key];
     else
-      newValue[this.styleAttribute.datasetKey] = key;
+      newValue[this.styleAttribute.key] = key;
     this.settingsManager.setSetting({
       [this.settingsKey]: newValue
     });
@@ -4038,9 +4079,9 @@ var _CanvasHelper = class _CanvasHelper {
   static addStyleAttributesButtons(canvas, stylableAttributes, currentStyleAttributes, setStyleAttribute) {
     var _a;
     for (const stylableAttribute of stylableAttributes) {
-      const selectedStyle = (_a = stylableAttribute.options.find((option) => currentStyleAttributes[stylableAttribute.datasetKey] === option.value)) != null ? _a : stylableAttribute.options.find((value) => value.value === null);
+      const selectedStyle = (_a = stylableAttribute.options.find((option) => currentStyleAttributes[stylableAttribute.key] === option.value)) != null ? _a : stylableAttribute.options.find((value) => value.value === null);
       const menuOption = _CanvasHelper.createExpandablePopupMenuOption({
-        id: `menu-option-${stylableAttribute.datasetKey}`,
+        id: `menu-option-${stylableAttribute.key}`,
         label: stylableAttribute.label,
         icon: selectedStyle.icon
       }, stylableAttribute.options.map((styleOption) => ({
@@ -4048,7 +4089,7 @@ var _CanvasHelper = class _CanvasHelper {
         icon: styleOption.icon,
         callback: () => {
           setStyleAttribute(stylableAttribute, styleOption.value);
-          currentStyleAttributes[stylableAttribute.datasetKey] = styleOption.value;
+          currentStyleAttributes[stylableAttribute.key] = styleOption.value;
           (0, import_obsidian7.setIcon)(menuOption, styleOption.icon);
           menuOption.dispatchEvent(new Event("click"));
         }
@@ -4098,7 +4139,7 @@ var _CanvasHelper = class _CanvasHelper {
         stylableAttributeElement.classList.add("tappable");
         const iconElement = document.createElement("div");
         iconElement.classList.add("menu-item-icon");
-        let selectedStyle = (_c = stylableAttribute.options.find((option) => currentStyleAttributes[stylableAttribute.datasetKey] === option.value)) != null ? _c : stylableAttribute.options.find((value) => value.value === null);
+        let selectedStyle = (_c = stylableAttribute.options.find((option) => currentStyleAttributes[stylableAttribute.key] === option.value)) != null ? _c : stylableAttribute.options.find((value) => value.value === null);
         (0, import_obsidian7.setIcon)(iconElement, selectedStyle.icon);
         stylableAttributeElement.appendChild(iconElement);
         const labelElement = document.createElement("div");
@@ -4138,7 +4179,7 @@ var _CanvasHelper = class _CanvasHelper {
               icon: styleOption.icon,
               callback: () => {
                 setStyleAttribute(stylableAttribute, styleOption.value);
-                currentStyleAttributes[stylableAttribute.datasetKey] = styleOption.value;
+                currentStyleAttributes[stylableAttribute.key] = styleOption.value;
                 selectedStyle = styleOption;
                 (0, import_obsidian7.setIcon)(iconElement, styleOption.icon);
                 styleMenuDropdownSubmenuElement.remove();
@@ -4476,6 +4517,7 @@ var PresentationCanvasExtension = class extends CanvasExtension {
     if (!tryContinue || this.visitedNodeIds.length === 0) {
       const startNode2 = this.getStartNode(canvas);
       if (!startNode2) {
+        new import_obsidian8.Notice("No start node found. Please mark a node as a start node trough the popup menu.");
         new import_obsidian8.Notice("No start node found. Please mark a node as a start node trough the popup menu.");
         return;
       }
@@ -7077,17 +7119,63 @@ var ExportCanvasExtension = class extends CanvasExtension {
   }
 };
 
+// src/managers/css-styles-config-manager.ts
+var import_obsidian13 = require("obsidian");
+var CssStylesConfigManager = class {
+  constructor(plugin, trigger, validate) {
+    this.plugin = plugin;
+    this.validate = validate;
+    this.cachedConfig = null;
+    this.configRegex = new RegExp(`\\/\\*\\s*@${trigger}\\s*\\n([\\s\\S]*?)\\*\\/`, "g");
+    this.plugin.registerEvent(this.plugin.app.workspace.on(
+      "css-change",
+      () => {
+        this.cachedConfig = null;
+      }
+    ));
+  }
+  getStyles() {
+    if (this.cachedConfig)
+      return this.cachedConfig;
+    this.cachedConfig = [];
+    const styleSheets = document.styleSheets;
+    for (let i = 0; i < styleSheets.length; i++) {
+      const sheet = styleSheets.item(i);
+      if (!sheet)
+        continue;
+      const styleSheetConfigs = this.parseStyleConfigsFromCSS(sheet);
+      for (const config of styleSheetConfigs) {
+        const validConfig = this.validate(config);
+        if (!validConfig)
+          continue;
+        this.cachedConfig.push(validConfig);
+      }
+    }
+    return this.cachedConfig;
+  }
+  parseStyleConfigsFromCSS(sheet) {
+    var _a, _b;
+    const textContent = (_b = (_a = sheet == null ? void 0 : sheet.ownerNode) == null ? void 0 : _a.textContent) == null ? void 0 : _b.trim();
+    if (!textContent)
+      return [];
+    const configs = [];
+    const matches = textContent.matchAll(this.configRegex);
+    for (const match of matches) {
+      const yamlString = match[1];
+      const configYaml = (0, import_obsidian13.parseYaml)(yamlString);
+      configs.push(configYaml);
+    }
+    return configs;
+  }
+};
+
 // src/canvas-extensions/advanced-styles/node-styles.ts
 var NodeStylesExtension = class extends CanvasExtension {
   isEnabled() {
     return "nodeStylingFeatureEnabled";
   }
   init() {
-    this.allNodeStyles = [...BUILTIN_NODE_STYLE_ATTRIBUTES, ...this.plugin.settings.getSetting("customNodeStyleAttributes")];
-    this.plugin.registerEvent(this.plugin.app.workspace.on(
-      PluginEvent.SettingsChanged,
-      () => this.allNodeStyles = [...BUILTIN_NODE_STYLE_ATTRIBUTES, ...this.plugin.settings.getSetting("customNodeStyleAttributes")]
-    ));
+    this.cssStylesManager = new CssStylesConfigManager(this.plugin, "advanced-canvas-node-style", styleAttributeValidator);
     this.plugin.registerEvent(this.plugin.app.workspace.on(
       CanvasEvent.PopupMenuCreated,
       (canvas) => this.onPopupMenuCreated(canvas)
@@ -7099,7 +7187,12 @@ var NodeStylesExtension = class extends CanvasExtension {
     if (canvas.readonly || selectionNodeData.length === 0 || selectionNodeData.length !== canvas.selection.size)
       return;
     const selectedNodeTypes = new Set(selectionNodeData.map((node) => node.type));
-    const availableNodeStyles = this.allNodeStyles.filter((style) => !style.nodeTypes || style.nodeTypes.some((type) => selectedNodeTypes.has(type)));
+    const availableNodeStyles = [
+      ...BUILTIN_NODE_STYLE_ATTRIBUTES,
+      /* Legacy */
+      ...this.plugin.settings.getSetting("customNodeStyleAttributes"),
+      ...this.cssStylesManager.getStyles()
+    ].filter((style) => !style.nodeTypes || style.nodeTypes.some((type) => selectedNodeTypes.has(type)));
     CanvasHelper.addStyleAttributesToPopup(
       this.plugin,
       canvas,
@@ -7120,7 +7213,7 @@ var NodeStylesExtension = class extends CanvasExtension {
         ...nodeData,
         styleAttributes: {
           ...nodeData.styleAttributes,
-          [attribute.datasetKey]: value
+          [attribute.key]: value
         }
       });
     }
@@ -7426,11 +7519,7 @@ var EdgeStylesExtension = class extends CanvasExtension {
     return "edgesStylingFeatureEnabled";
   }
   init() {
-    this.allEdgeStyleAttributes = [...BUILTIN_EDGE_STYLE_ATTRIBUTES, ...this.plugin.settings.getSetting("customEdgeStyleAttributes")];
-    this.plugin.registerEvent(this.plugin.app.workspace.on(
-      PluginEvent.SettingsChanged,
-      () => this.allEdgeStyleAttributes = [...BUILTIN_EDGE_STYLE_ATTRIBUTES, ...this.plugin.settings.getSetting("customEdgeStyleAttributes")]
-    ));
+    this.cssStylesManager = new CssStylesConfigManager(this.plugin, "advanced-canvas-edge-style", styleAttributeValidator);
     this.plugin.registerEvent(this.plugin.app.workspace.on(
       CanvasEvent.PopupMenuCreated,
       (canvas) => this.onPopupMenuCreated(canvas)
@@ -7480,7 +7569,12 @@ var EdgeStylesExtension = class extends CanvasExtension {
     CanvasHelper.addStyleAttributesToPopup(
       this.plugin,
       canvas,
-      this.allEdgeStyleAttributes,
+      [
+        ...BUILTIN_EDGE_STYLE_ATTRIBUTES,
+        /* Legacy */
+        ...this.plugin.settings.getSetting("customEdgeStyleAttributes"),
+        ...this.cssStylesManager.getStyles()
+      ],
       (_a = selectedEdges[0].getData().styleAttributes) != null ? _a : {},
       (attribute, value) => this.setStyleAttributeForSelection(canvas, attribute, value)
     );
@@ -7493,7 +7587,7 @@ var EdgeStylesExtension = class extends CanvasExtension {
         ...edgeData,
         styleAttributes: {
           ...edgeData.styleAttributes,
-          [attribute.datasetKey]: value
+          [attribute.key]: value
         }
       });
     }
@@ -7512,8 +7606,17 @@ var EdgeStylesExtension = class extends CanvasExtension {
     var _a, _b, _c, _d, _e, _f, _g;
     if (!canvas.dirty.has(edge) && !canvas.selection.has(edge))
       return;
-    if (!this.shouldUpdateEdge(canvas) && canvas.selection.size > MAX_LIVE_UPDATE_SELECTION_SIZE)
-      return;
+    if (!this.shouldUpdateEdge(canvas)) {
+      const tooManySelected = canvas.selection.size > MAX_LIVE_UPDATE_SELECTION_SIZE;
+      if (tooManySelected)
+        return;
+      const groupNodesSelected = [...canvas.selection].some((item) => {
+        var _a2;
+        return ((_a2 = item.getData()) == null ? void 0 : _a2.type) === "group";
+      });
+      if (groupNodesSelected)
+        return;
+    }
     const edgeData = edge.getData();
     if (!edge.bezier)
       return;
@@ -7764,7 +7867,7 @@ var CANVAS_EXTENSIONS = [
   PresentationCanvasExtension,
   PortalsCanvasExtension
 ];
-var AdvancedCanvasPlugin = class extends import_obsidian13.Plugin {
+var AdvancedCanvasPlugin = class extends import_obsidian14.Plugin {
   async onload() {
     this.migrationHelper = new MigrationHelper(this);
     await this.migrationHelper.migrate();
@@ -7780,7 +7883,7 @@ var AdvancedCanvasPlugin = class extends import_obsidian13.Plugin {
   onunload() {
   }
   getCurrentCanvasView() {
-    const canvasView = this.app.workspace.getActiveViewOfType(import_obsidian13.ItemView);
+    const canvasView = this.app.workspace.getActiveViewOfType(import_obsidian14.ItemView);
     if ((canvasView == null ? void 0 : canvasView.getViewType()) !== "canvas")
       return null;
     return canvasView;
