@@ -4,9 +4,10 @@ tags:
 aliases:
 ---
 
+
 # Description
 
 
 ## Makes notable use of
-- [[Information travel time]]
-- [[Newtonian physics]]
+- [[Instant communication]] in the form of the Ansible
+- 
