@@ -13,7 +13,7 @@ Related: [[Gravity]], [[Simulation]]
 - 
 
 ## Examples
-- [[Nebulous fleet command]] makes use of partial Newtonian physics
+- [[Nebulous fleet command]] makes partial use of Newtonian physics
 - [[The Expanse]] makes use of Newtonian physics
 - 
 ```dataview

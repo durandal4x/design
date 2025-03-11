@@ -19,12 +19,19 @@
 .ac-settings-heading .setting-item-description {
   margin-inline-end: 20px;
 }
+.ac-settings-heading:has(.checkbox-container:not(.is-enabled)) + .settings-header-children {
+  opacity: 0.5;
+  pointer-events: none;
+}
 details.setting-item[open] > summary {
   margin-bottom: 0.75em;
 }
 details.setting-item > *:not(summary) {
   padding-left: 1em;
   border-left: 1px solid var(--color-accent);
+}
+body.is-mobile .kofi-button.sticky {
+  display: none;
 }
 .kofi-button {
   height: 30px;
@@ -49,7 +56,17 @@ details.setting-item > *:not(summary) {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.9);
+}
+.kofi-overlay::before {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-base-00);
+  opacity: 0.95;
 }
 .kofi-overlay h1 {
   margin-bottom: 0;
@@ -359,7 +376,7 @@ details.setting-item > *:not(summary) {
 .canvas-edges [data-arrow=thin-triangle] polygon {
   fill: transparent;
   stroke: rgb(var(--canvas-color));
-  stroke-width: calc(3px * var(--zoom-multiplier));
+  stroke-width: calc(4px * var(--zoom-multiplier));
 }
 .canvas.is-exporting {
   --zoom-multiplier: 1;
@@ -424,6 +441,24 @@ details.setting-item > *:not(summary) {
 .canvas-node-interaction-layer[data-target-is-collapsed] .canvas-node-resizer .canvas-node-connection-point {
   display: none;
   pointer-events: none;
+}
+.canvas-wrapper[data-floating-edge-feature-enabled=true] .canvas.is-connecting .canvas-node:not(.canvas-node-group)::after {
+  all: unset;
+  content: "";
+  z-index: 100;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(10px, 100% - 50px * var(--zoom-multiplier) * 2);
+  height: max(10px, 100% - 50px * var(--zoom-multiplier) * 2);
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-m);
+  outline: calc(4px * var(--zoom-multiplier)) dashed hsla(var(--color-accent-hsl), 0.5);
+}
+.canvas-wrapper[data-floating-edge-feature-enabled=true] .canvas.is-connecting .canvas-node:not(.canvas-node-group).hovering-floating-edge-zone::after {
+  outline-color: var(--color-accent);
+  outline-style: solid;
+  background-color: hsla(var(--color-accent-hsl), 0.1);
 }
 .canvas-wrapper[data-focus-mode-enabled=true] .canvas:has(.canvas-node.is-focused) .canvas-node:not(.is-focused) {
   filter: blur(5px);
