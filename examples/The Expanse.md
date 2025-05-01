@@ -4,7 +4,7 @@ tags:
 aliases:
 ---
 
-![[Pasted image 20250310212823.png]]
+![[the_expanse.png]]
 
 ## Makes notable use of
 - [[Newtonian physics]] where gravity is provided by thrust

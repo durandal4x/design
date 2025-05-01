@@ -1,3 +1,11 @@
+---
+tags: 
+type: design-doc
+issue_number: 
+github_issue: 
+comments: 
+---
+
 Government player chooses what type of government space agency it runs, with which focuses.
 Can have their own rockets, or contract to private companies.
 Focuses on commercial satellites, research, military, etc.
