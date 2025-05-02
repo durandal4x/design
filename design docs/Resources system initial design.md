@@ -15,6 +15,8 @@ A resource system underpins almost every aspect of an economic system and severa
 - Resources need to be able to have things affect them over time (e.g. spoilage)
 
 # Data
+
+## Normal resources
 ### Resource types
 These represent information regarding a given resource which is then referenced by instances of the resource.
 ```
@@ -49,8 +51,52 @@ Representing a specific instance of a resource existing. If two instances are co
 | Water       | 1000     |         |
 | Metal sheet | 1000     | Normal  |
 
+## Composite resources
+Composite resources represent a resource with two or more components making up the actual content of the resource. For example, extracting ferrous ores will yield you iron but there will be other elements there too. These will be present and depending on equipment and resources can be identified (or possibly be known from the outset if surveys take place).
 
-# More to add
-- Composite resources, how do we handle things like "muddy water" which we'd want to be able to filter.
-	- Composites need to be able to have different compositions, different harvests will have different quantities of minerals
-	- Composites need to have the ability to have their contents hidden, e.g. you have muddy water but you don't know what the mud is
+These compositions can vary in both content (one asteroid might have carbon and iron, another might have oxygen and iron) and in quantities (one is rich in iron, another poor). We will need a way to represent this.
+
+### Composite types
+```
+	name: string
+	contents: array of resource_type_id
+```
+
+#### Examples
+
+| Name        | Contents                      |
+| ----------- | ----------------------------- |
+| Ferrous ore | Iron, Carbon, Boron           |
+| Ferrous ore | Iron, Carbon, Boron, Titanium |
+| Frozen ore  | Water, Hydrogen, Oxygen       |
+| Frozen ore  | Water, Hydrogen, Helium       |
+As we can see a composite type only tracks a list of resource types present in that composition.
+
+### Composite instances
+A composite instance represents the composite resource existing at a location in the game similar to a normal resource instance. The main difference is it has some combined properties based on the composition.
+
+```
+	type: composite_type_id
+	ratios: array of integer
+	quantity: integer
+	combined_mass: integer
+	combined_volume: integer
+```
+
+The ratios added together represent the whole allowing for more precise fractions without having to use floating point numbers.
+
+Combined values represent cached calculations of the elements of the composition to prevent having to be re-calculated every time a common request needs to be made.
+
+#### Examples
+In these examples each type refers to the first of that name; within the database it would use an id value allowing for multiple composites of the same name but with different compositions to exist.
+
+| Type        | Ratios       | Quantity | Combined mass | Combined volume |
+| ----------- | ------------ | -------- | ------------- | --------------- |
+| Ferrous Ore | 400, 100, 50 | 1000     | 1000          | 100             |
+| Ferrous Ore | 800, 100, 50 | 1000     | 1300          | 100             |
+
+
+
+# Things still unceratin
+- Composites need to have the ability to have their contents hidden, e.g. you have muddy water but you don't know what the mud is. This strikes me as something we can do after implementing the resource system as opposed to being part of it. Gut feeling tells me it's the same pattern as an authorisation issue (permissions come from doing scans etc).
+- Do we need both mass and volume?
