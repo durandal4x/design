@@ -8,24 +8,26 @@ github_issue:
 comments:
 ---
 # Goal
-A resource system underpins almost every aspect of an economic system and several more to boot. We want to have a flexible resource system allowing for complexity and depth without requiring either. Summarised as bullet points we want:
-- Resources to have a physical storage location
-- Resources need to be transported between locations to be consumed
-- Resources need to have varying storage requirements (e.g. mass and volume)
-- Resources need to be able to have things affect them over time (e.g. spoilage)
+A [[Resources system]] underpins almost every aspect of an economic system and several more to boot. We want to have a flexible resource system allowing for complexity and depth without requiring either. A list of functional behaviour we want to enable is:
+- Presence in a physical location (e.g. station, ship etc)
+- Transfer resources from one storage to another at the same location (e.g. ship docked at a station)
+- Transport resources between locations by having the container (e.g. ship) travel
+- Varying storage requirements such as mass, volume and specialised containers (though not limited to just these)
+- Affecting of resources over time (e.g. [[spoilage]])
+- Some resources in theory be the same but actually contain different parts (e.g. ores mined from two different locations)
 
-# Data
+# Proposed data
 
 ## Normal resources
+The bread and butter of the resource system, tracking the resources possessed by every entity.
+
 ### Resource types
 These represent information regarding a given resource which is then referenced by instances of the resource.
-```
-	name: string
-	mass: integer (kilograms per unit)
-	volume: integer (cubic meters per unit)
-	quality?: boolean (manufactured and refined goods can have a quality)
-	tags: array of string (things like `liquid` and `combustable` along with additional behaviours/restrictions we want to add later)
-```
+- **name**: `string`
+- **mass**: `integer` (kilograms per unit)
+- **volume**: `integer` (cubic meters per unit)
+- **quality?**: `boolean` (manufactured and refined goods can have a quality)
+- **tags**: `array of string` (things like "liquid" and "combustible" along with additional behaviours/restrictions we want to add later)
 
 #### Examples
 
@@ -38,11 +40,10 @@ These represent information regarding a given resource which is then referenced 
 
 ### Resource instances
 Representing a specific instance of a resource existing. If two instances are combined then one would be deleted. It is expected within the database the instances will be further broken down by location type (e.g. ship or station).
-```
-	type: resource_type
-	quantity: integer
-	quality: Enum of strings
-```
+
+- **type**: `resource_type`
+- **quantity**: `integer`
+- **quality**: `Enum of strings`
 
 #### Examples
 
@@ -57,10 +58,8 @@ Composite resources represent a resource with two or more components making up t
 These compositions can vary in both content (one asteroid might have carbon and iron, another might have oxygen and iron) and in quantities (one is rich in iron, another poor). We will need a way to represent this.
 
 ### Composite types
-```
-	name: string
-	contents: array of resource_type_id
-```
+- **name**: `string`
+- **contents**: `array of resource_type_id`
 
 #### Examples
 
@@ -75,13 +74,11 @@ As we can see a composite type only tracks a list of resource types present in t
 ### Composite instances
 A composite instance represents the composite resource existing at a location in the game similar to a normal resource instance. The main difference is it has some combined properties based on the composition.
 
-```
-	type: composite_type_id
-	ratios: array of integer
-	quantity: integer
-	combined_mass: integer
-	combined_volume: integer
-```
+- **type**: `composite_type_id`
+- **ratios**: `array of integer`
+- **quantity**: `integer`
+- **combined_mass**: `integer`
+- **combined_volume**: `integer`
 
 The ratios added together represent the whole allowing for more precise fractions without having to use floating point numbers.
 
@@ -95,8 +92,53 @@ In these examples each type refers to the first of that name; within the databas
 | Ferrous Ore | 400, 100, 50 | 1000     | 1000          | 100             |
 | Ferrous Ore | 800, 100, 50 | 1000     | 1300          | 100             |
 
+# Future additions
+We currently want to have the following things as components of the resources system but without a better understanding of how other systems will work we will not define them fully at this stage. Instead we will outline a current ambition for them and revisit them later.
+
+### Hidden contents
+We want to allow players to be able to mine raw materials without knowing their exact composition, indeed we will likely want to have varying degrees of understanding of the contents of a resource, e.g.
+- Asteroid
+- Iron/Nickel asteroid
+- Iron/Nickel asteroid with small amounts of Titanium and Cobalt
+- Iron 40%, Nickel 30% asteroid with small amounts of Titanium and Cobalt
+- A full breakdown of the resources in the asteroid
+
+That is just one example, another would be where a spy has information on a "metal ore" being transported but without knowing the actual composition of the ore.
+
+This means we will need to have the fully information stored in the entity (so regardless of what you know, you're getting the same result, we don't roll for discovery when you observe it) but with different levels of understanding about it.
+
+To my mind this is the same pattern as a permissions system where different groups have access to differing amounts of information about it. By combining that access level and the composition data the game is able to generate textual information for the player.
+
+### Spoilage
+Spoilage is the function of transforming a resource from one type to another given time and conditions. Some examples include:
+- Food spoiling if not refrigerated or frozen
+- Radioactive materials decaying over time
+- Delicate materials breaking if shaken or not stored correctly
+- Pressurised resources leaking if stored in a poor quality container
+
+This will likely entail storing additional information about resources and should be approached carefully.
+
+#### Example spoilage systems
+- [[Factorio]] - https://wiki.factorio.com/Spoilage
+- [[Rimworld]] - https://rimworldwiki.com/wiki/Food#Degradation and https://rimworldwiki.com/wiki/Deterioration
+
+### Tagged behaviours
+The purpose of the tags is to allow overlapping behaviours to be defined for different resource types. It is intended new behaviours can be added without overhauling the entire system without needing to plan out it completely at this stage.
+
+#### Examples
+- `liquid` - Liquids require different containers for both storage and transfer.
+- `combust-in-heat` - If exposed to heat this resource will explode, how we track the amount of damage it does is not certain at this stage
+- `explosive` - If part of an explosion this will increase the explosion, as with the combust in heat I'm not sure how we'd want to handle the contributions being made
+- `needs-atmosphere` - Must be stored in a container with an atmosphere
+- `delicate` - Slow to transfer, maybe must be stored in a specifically designed container
+
+It is possible we could use tags with numbers such as `explosive1`, `explosive2` etc to denote levels of a tag and how it should be used within the relevant functions.
+
+#### Examples of other tags we might use
+- [Hazard types](https://hsewatch.com/types-of-hazards/)
 
 
-# Things still unceratin
-- Composites need to have the ability to have their contents hidden, e.g. you have muddy water but you don't know what the mud is. This strikes me as something we can do after implementing the resource system as opposed to being part of it. Gut feeling tells me it's the same pattern as an authorisation issue (permissions come from doing scans etc).
-- Do we need both mass and volume?
+# Outstanding questions
+- Do we need both mass and volume per unit?
+- Do we want to have some things be unit-less (e.g. ore) and other things be units (e.g. components)?
+- If that is the case, do we want to have a different data-store for resources vs discrete components?

@@ -1,6 +1,7 @@
 ---
 type: example
 tags: 
-aliases:
+aliases: 
+websites:
 ---
 <% await tp.file.move("examples/" + tp.file.title) %>

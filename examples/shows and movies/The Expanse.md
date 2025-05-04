@@ -1,7 +1,10 @@
 ---
 type: example
 tags: 
-aliases:
+aliases: 
+websites:
+  - https://en.wikipedia.org/wiki/The_Expanse_(novel_series)
+  - https://en.wikipedia.org/wiki/The_Expanse_(TV_series)
 ---
 
 ![[the_expanse.png]]
