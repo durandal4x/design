@@ -1,7 +1,9 @@
 ---
 type: example
 tags: 
-aliases:
+aliases: 
+websites:
+  - https://en.wikipedia.org/wiki/The_Risen_Empire
 ---
 
 # Description
